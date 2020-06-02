@@ -1,0 +1,1 @@
+docker run --runtime=nvidia -it --name sds -v /dev/snd:/dev/snd -v ~/hdd_ext/DeepLearning/sds/sds_final:/sds -v /tmp/.X11-unix:/tmp/.X11-unix:ro -e DISPLAY=unix$DISPLAY --ip host khosungpil/sds:1.0
