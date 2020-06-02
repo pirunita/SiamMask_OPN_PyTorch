@@ -66,7 +66,7 @@ bash demo.sh
 
 2. Select bounding box
 <p align="center">
-<img src='./src/1.png' width="80%" height="80%">
+<img src='./src/1.png' width="40%" height="40%">
 
 3. When press 'a' in keyboard, then determine bounding box.
 4. When press 'b' in keyboard, then inference each models.
@@ -75,8 +75,8 @@ bash demo.sh
 7. Finally, you can check the gif file in the results
 
 
-<img src='./results/mask.gif' width="40%" height="40%">
-<img src='./results/final.gif' width="40%" height="40%">
+<img src='./src/mask.gif' width="40%" height="40%">
+<img src='./src/final.gif' width="40%" height="40%">
 
 
 # Reference #
