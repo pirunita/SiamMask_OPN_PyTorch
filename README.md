@@ -65,16 +65,18 @@ bash demo.sh
 ~~~
 
 2. Select bounding box
-<p align="center">
-<img src='./src/1.png' width="40%" height="40%">
-
 3. When press 'a' in keyboard, then determine bounding box.
+<p align="center">
+<img src='./src/1.png' width="40%" height="40%"><img src='./src/2.png' width="40%" height="40%">
+
+
 4. When press 'b' in keyboard, then inference each models.
 5. You can check the masks in the results/masks throught Siammask
 6. You can check the results in the results/final throught Onion-pell
 7. Finally, you can check the gif file in the results
 
 <p align="center">
+<img src='./src/input.gif', width="30%" height="30%">
 <img src='./src/mask.gif' width="30%" height="30%"><img src='./src/final.gif' width="30%" height="30%">
 
 
