@@ -5,10 +5,10 @@
 
 __pycache__
 
-*.jpg
-*.png
+
 
 *.pyc
 *.pth
 
+tennis
 results
