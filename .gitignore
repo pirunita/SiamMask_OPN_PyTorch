@@ -1,0 +1,12 @@
+## Ignore file ##
+
+.DS_Store
+.vscode
+
+__pycache__
+
+*.jpg
+*.png
+
+*.pyc
+*.pth
