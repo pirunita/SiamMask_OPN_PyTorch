@@ -75,8 +75,7 @@ bash demo.sh
 7. Finally, you can check the gif file in the results
 
 
-<img src='./src/mask.gif' width="40%" height="40%">
-<img src='./src/final.gif' width="40%" height="40%">
+<img src='./src/mask.gif' width="30%" height="30%"><img src='./src/final.gif' width="30%" height="30%">
 
 
 # Reference #
