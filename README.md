@@ -74,7 +74,7 @@ bash demo.sh
 6. You can check the results in the results/final throught Onion-pell
 7. Finally, you can check the gif file in the results
 
-
+<p align="center">
 <img src='./src/mask.gif' width="30%" height="30%"><img src='./src/final.gif' width="30%" height="30%">
 
 
