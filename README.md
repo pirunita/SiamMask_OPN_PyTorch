@@ -44,22 +44,26 @@ objective : Samsung SDS
 
 # Usage #
 ## Requirement ##
+* I recommend using docker
+
 ### Docker version ###
+1. Edit mounted directory where code file is in docker_setting.sh 
+2. Run docker_setting.sh
 ~~~
-docker pull khosungpil/sds:1.0
-
-or
-
 bash docker_setting.sh
 ~~~
+3. Go to /sds/
+
+
 ### Pretrained model ###
-SiamMask_DAVIS: <a href="https://drive.google.com/file/d/1EebLJU0QVi322BYnL7uwHFTOYsm5tTDB/view?usp=sharing">[Download]</a> <br>
-OPN: <a href="https://drive.google.com/file/d/1o-NQPsPac5AZixlDkxhm34bOOcy-2Zn6/view?usp=sharing">[Download]</a><br>
-TCN: <a href="https://drive.google.com/file/d/1MUM_OH7yIjm2KShZJ4stmA6dXEuX-5jd/view?usp=sharing">[Download]</a><br>
+SiamMask_DAVIS(./Siammask_sharp): <a href="https://drive.google.com/file/d/1EebLJU0QVi322BYnL7uwHFTOYsm5tTDB/view?usp=sharing">[Download]</a> <br>
+OPN(./OnionPeel/): <a href="https://drive.google.com/file/d/1o-NQPsPac5AZixlDkxhm34bOOcy-2Zn6/view?usp=sharing">[Download]</a><br>
+TCN(./OnionPeel/): <a href="https://drive.google.com/file/d/1MUM_OH7yIjm2KShZJ4stmA6dXEuX-5jd/view?usp=sharing">[Download]</a><br>
 
 
 ## Demo ##
-1. Run ./demo.sh
+1. You can edit DATA_PATH in demo.sh
+2. Run ./demo.sh in docker container
 ~~~
 bash demo.sh
 ~~~
