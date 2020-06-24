@@ -3,7 +3,7 @@ DATA_NAME="hollywood"
 VIDEO_SCALE_FACTOR=0.25
 PADDING_FACTOR=0.05
 OPN_DILATE_FACTOR=3
-OPN_SCALE_FACTOR=1
+OPN_SCALE_FACTOR=0.5
 
 ######################
 DATA_PATH="data/${DATA_NAME}"
@@ -36,5 +36,4 @@ python make_gif.py --base_path ${DATA_PATH} \
                    --result_path ${RESULT_PATH} \
                    --mask_path ${MASK_PATH} \
                    --mask_path2 ${MASK_PATH2} \
-                   --save_path ${SAVE_PATH}
-
+                   --save_path ${SAVE_PATH} \
