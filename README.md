@@ -84,7 +84,8 @@ OPN_SCALE_FACTOR   | you can resize again from images per frame to fit memory, (
 bash docker_setting.sh
 ~~~
 4. Go to /sds/ in activated container.
-
+5. If you have a video file, then run python demo.sh with line 19(python video_preprocess.py ~). You will acquire images per frame from video.
+   * You can add video extension in line 23, extension_list in video_preprocess.py, <br>default: '.mov', 'MOV', '.MP4'
 
 ### Pretrained model ###
 model | path | Hyperlink
