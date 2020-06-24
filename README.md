@@ -67,7 +67,7 @@ DATA_NAME          | folder name in "./data" directory
 VIDEO_SCALE_FACTOR | For translating high-resolution video to low-resolution image per frame with resizing images, (default=0.25)
 PADDING_FACTOR     | In guidance module, pad image_size * padding_factor, (default=0.05) <br>ex) 320 x 240 images, 0.05 padding_factor -> 16 x 12 pad
 OPN_DILATE_FACTOR  | preprocess to raw_mask with dilation, (default=3)
-OPN_SCALE_FACTOR   | you can resize again from images per frame to fit memory, (default=1)
+OPN_SCALE_FACTOR   | you can resize again from images per frame to fit memory, (default=0.5)
 
 
 
