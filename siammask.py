@@ -26,8 +26,11 @@ parser.add_argument('--config', dest='config', default='./Siammask_sharp/config/
                     help='hyper-parameter of SiamMask in json format')
 parser.add_argument('--base_path', default='./data/tennis', help='datasets')
 
-parser.add_argument('--result_path', default='./results/')
-parser.add_argument('--mask_path', default='./results/masks/')
+parser.add_argument('--root_path', default='./results/')
+parser.add_argument('--result_path', default='./results/tennis/')
+parser.add_argument('--mask_path', default='./results/tennis/masks/')
+parser.add_argument('--padding_factor', type=float, default=0.05, help='padding factor in guidance')
+
 parser.add_argument('--cpu', action='store_true', help='cpu mode')
 args = parser.parse_args()
 
@@ -37,11 +40,15 @@ if __name__ == '__main__':
     torch.backends.cudnn.benchmark = True
 
     # Make directory
+    if not os.path.exists(args.root_path):
+        os.makedirs(args.result_path)
+        
     if not os.path.exists(args.result_path):
         os.makedirs(args.result_path)
     
     if not os.path.exists(args.mask_path):
         os.makedirs(args.mask_path)
+    
     # Setup SiamMask Model
     cfg = load_config(args)
     from Siammask_sharp.tools.custom import Custom
@@ -68,7 +75,7 @@ if __name__ == '__main__':
         exit()
     """
     rect_img = ims[0].copy()
-    guide = Guide(args.name, rect_img)
+    guide = Guide(args.name, rect_img, args.padding_factor)
     
     
     x = guide.minX
