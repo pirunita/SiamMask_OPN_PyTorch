@@ -1,2 +1,2 @@
 MOUNTED_PATH="/home/khosungpil/hdd_ext/DeepLearning/sds/sds_final"
-docker run --runtime=nvidia -it --name sds -v /dev/snd:/dev/snd -v ${MOUNTED_PATH}:/sds -v /tmp/.X11-unix:/tmp/.X11-unix:ro -e DISPLAY=unix$DISPLAY --ip host khosungpil/sds:1.0
+docker run --runtime=nvidia -it --name sds -v /dev/snd:/dev/snd -v ${MOUNTED_PATH}:/sds -v /tmp/.X11-unix:/tmp/.X11-unix:ro -e DISPLAY=unix$DISPLAY --ip host khosungpil/sds:2.0
