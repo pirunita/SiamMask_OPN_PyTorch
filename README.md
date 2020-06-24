@@ -1,6 +1,6 @@
 ---
 title : Guidance module + SiamMask + Onion-peel
-version : 0.0.1
+version : 2.0
 writer: khosungpil
 type : Version document
 objective : Samsung SDS
@@ -11,7 +11,6 @@ objective : Samsung SDS
 * CPU Resource: Inter(R) Core(TM) i7-6700 CPU @ 3.40GHz
 * GPU Resource: GTX 1080ti 1x
 * Docker Version: 19.03.8
-* Version: 2.0
 
 
 # Directory #
