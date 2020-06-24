@@ -32,21 +32,22 @@ objective : Samsung SDS
     └── TCN.pth
 
 ├── data
-    └── tennis
-        ├── OPN.MP4                 (Video File)
+    └── ${DATA_NAME}
+        ├── ???.MP4                 (Video File)
         └── *.jpg
 
-└── results(${DATA_NAME})
-    ├── final
-        └── *.jpg
-    ├── masks : Binary mask
-        └── *.png
-    ├── masks2 : Color mask in input images
-        └── *.png
-    ├── input.gif
-    ├── final.gif
-    ├── mask.gif
-    └── mask2.gif
+└── results
+    └── ${DATA_NAME}
+        ├── final
+            └── *.jpg
+        ├── masks : Binary mask
+            └── *.png
+        ├── masks2 : Color mask in input images
+            └── *.png
+        ├── input.gif
+        ├── final.gif
+        ├── mask.gif
+        └── mask2.gif
 ~~~
 Directory name | role
 ---------------|-------
