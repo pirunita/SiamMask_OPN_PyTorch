@@ -20,13 +20,21 @@ parser.add_argument('--opn_path', type=str, default='./OnionPeel/OPN.pth')
 parser.add_argument('--tcn_path', type=str, default='./OnionPeel/TCN.pth')
 
 parser.add_argument('--base_path', type=str, default='./data/tennis', help='datasets')
-parser.add_argument('--result_path', default='./results/')
-parser.add_argument('--mask_path', default='./results/masks/')
-parser.add_argument('--save_path', default='./results/final/')
+parser.add_argument('--root_path', default='./results/')
+parser.add_argument('--result_path', default='./results/tennis/')
+parser.add_argument('--mask_path', default='./results/tennis/masks/')
+parser.add_argument('--mask_path2', default='./results/tennis/masks2/')
+parser.add_argument('--save_path', default='./results/tennis/final/')
+parser.add_argument('--scale_factor', type=float, default=1)
+parser.add_argument('--dilate_factor', type=int, default=3)
 
 args = parser.parse_args()
 
 if __name__ == '__main__':
+    # Make directory
+    if not os.path.exists(args.mask_path2):
+        os.makedirs(args.mask_path2)
+        
     # Setup device
     device = torch.device('cuda' if torch.cuda.is_available() else 'cpu')
     torch.backends.cudnn.benchmark = True
@@ -34,24 +42,34 @@ if __name__ == '__main__':
     # Make directory
     if not os.path.exists(args.save_path):
         os.makedirs(args.save_path)
-        
-    T = len(glob.glob(os.path.join(args.base_path, '*.*')))
-    H, W = 240, 424
+    
+    img_list = glob.glob(os.path.join(args.base_path, '*.jp*'))
+    img = Image.open(img_list[0]).convert('RGB')
+    ori_W, ori_H = img.size
+    T = len(img_list)
+    W = int(args.scale_factor * ori_W)
+    H = int(args.scale_factor * ori_H)
+    """
+    temp_img = np.array(Image.open(img_list[0]).convert('RGB'))/255
+    H = temp_img.shape[0]
+    W = temp_img.shape[1]
+    """
+    
     frames = np.empty((T, H, W, 3), dtype=np.float32)
     holes = np.empty((T, H, W, 1), dtype=np.float32)
     dists = np.empty((T, H, W, 1), dtype=np.float32)
     for i in range(T-1):
         # rgb
         img_file = os.path.join(args.base_path, '{:05d}.jpg'.format(i+1))
-        raw_frame = np.array(Image.open(img_file).convert('RGB'))/255.
-        raw_frame = cv2.resize(raw_frame, dsize=(W, H), interpolation=cv2.INTER_LINEAR)
+        raw_frame = np.array(Image.open(img_file).convert('RGB').resize((W, H), Image.BILINEAR))/255.
+        #raw_frame = cv2.resize(raw_frame, dsize=(W, H), interpolation=cv2.INTER_LINEAR)
         frames[i] = raw_frame
         # mask
         mask_file = os.path.join(args.mask_path, '{:05d}.png'.format(i+1))
-        raw_mask = np.array(Image.open(mask_file).convert('P'), dtype=np.uint8)
+        raw_mask = np.array(Image.open(mask_file).resize((W, H), Image.NEAREST).convert('P'), dtype=np.uint8)
         raw_mask = (raw_mask > 0.5).astype(np.uint8)
-        raw_mask = cv2.resize(raw_mask, dsize=(W, H), interpolation=cv2.INTER_NEAREST)
-        raw_mask = cv2.dilate(raw_mask, cv2.getStructuringElement(cv2.MORPH_CROSS,(3,3)))
+        #raw_mask = cv2.resize(raw_mask, dsize=(W, H), interpolation=cv2.INTER_NEAREST)
+        raw_mask = cv2.dilate(raw_mask, cv2.getStructuringElement(cv2.MORPH_CROSS,(args.dilate_factor, args.dilate_factor)))
         holes[i,:,:,0] = raw_mask.astype(np.float32)
         # dist
         dists[i,:,:,0] = cv2.distanceTransform(raw_mask, cv2.DIST_L2, maskSize=5)
@@ -131,8 +149,12 @@ if __name__ == '__main__':
         canvas = np.concatenate([est], axis=0)
         canvas = Image.fromarray(canvas)
         canvas.save(os.path.join(args.save_path, '{:05d}.jpg'.format(f)))
-    
-    print('Results are saved: ./{}'.format(args.save_path))
         
+        canvas2 = np.concatenate([ov_true], axis=0)
+        canvas2 = Image.fromarray(canvas2)
+        canvas2.save(os.path.join(args.mask_path2, '{:05d}.jpg'.format(f)))
+    
+    print('Results are saved: {}'.format(args.save_path))
+    print('Masks2 are saved : {}'.format(args.mask_path2))
     
     
