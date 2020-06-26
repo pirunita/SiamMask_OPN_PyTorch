@@ -120,7 +120,6 @@ bash demo.sh
 <img src='./src/input.gif', width="30%" height="30%">
 <img src='./src/mask.gif' width="30%" height="30%"><img src='./src/final.gif' width="30%" height="30%">
 
-
 # Reference #
 
 [CVPR 2019] Fast Online Object Tracking and Segmentation: A Unifying Approach
