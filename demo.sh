@@ -1,9 +1,9 @@
 ### Edit parameter ###
-DATA_NAME="hollywood"
+DATA_NAME="sinchon"
 VIDEO_SCALE_FACTOR=0.25
 PADDING_FACTOR=0.05
 OPN_DILATE_FACTOR=3
-OPN_SCALE_FACTOR=0.5
+OPN_SCALE_FACTOR=0.25
 
 ######################
 DATA_PATH="data/${DATA_NAME}"

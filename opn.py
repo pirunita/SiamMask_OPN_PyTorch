@@ -49,12 +49,7 @@ if __name__ == '__main__':
     T = len(img_list)
     W = int(args.scale_factor * ori_W)
     H = int(args.scale_factor * ori_H)
-    """
-    temp_img = np.array(Image.open(img_list[0]).convert('RGB'))/255
-    H = temp_img.shape[0]
-    W = temp_img.shape[1]
-    """
-    
+        
     frames = np.empty((T, H, W, 3), dtype=np.float32)
     holes = np.empty((T, H, W, 1), dtype=np.float32)
     dists = np.empty((T, H, W, 1), dtype=np.float32)
@@ -62,15 +57,15 @@ if __name__ == '__main__':
         # rgb
         img_file = os.path.join(args.base_path, '{:05d}.jpg'.format(i+1))
         raw_frame = np.array(Image.open(img_file).convert('RGB').resize((W, H), Image.BILINEAR))/255.
-        #raw_frame = cv2.resize(raw_frame, dsize=(W, H), interpolation=cv2.INTER_LINEAR)
+        
         frames[i] = raw_frame
         # mask
         mask_file = os.path.join(args.mask_path, '{:05d}.png'.format(i+1))
         raw_mask = np.array(Image.open(mask_file).resize((W, H), Image.NEAREST).convert('P'), dtype=np.uint8)
         raw_mask = (raw_mask > 0.5).astype(np.uint8)
-        #raw_mask = cv2.resize(raw_mask, dsize=(W, H), interpolation=cv2.INTER_NEAREST)
         raw_mask = cv2.dilate(raw_mask, cv2.getStructuringElement(cv2.MORPH_CROSS,(args.dilate_factor, args.dilate_factor)))
         holes[i,:,:,0] = raw_mask.astype(np.float32)
+        
         # dist
         dists[i,:,:,0] = cv2.distanceTransform(raw_mask, cv2.DIST_L2, maskSize=5)
         

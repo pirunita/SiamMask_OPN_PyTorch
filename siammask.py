@@ -64,16 +64,6 @@ if __name__ == '__main__':
     ims = [cv2.imread(imf) for imf in img_files]
 
     # Select ROI
-    
-    """
-    cv2.namedWindow("SiamMask", cv2.WND_PROP_FULLSCREEN)
-    # cv2.setWindowProperty("SiamMask", cv2.WND_PROP_FULLSCREEN, cv2.WINDOW_FULLSCREEN)
-    try:
-        init_rect = cv2.selectROI('SiamMask', ims[0], False, False)
-        x, y, w, h = init_rect
-    except:
-        exit()
-    """
     rect_img = ims[0].copy()
     guide = Guide(args.name, rect_img, args.padding_factor)
     
@@ -98,9 +88,7 @@ if __name__ == '__main__':
             mask = state['mask'] > state['p'].seg_thr
             for i in range(3):
                 opn_image[:, :, i] = (mask > 0) * 255
-            #opn_image = cv2.cvtColor(opn_image, cv2.COLOR_BGR2GRAY)
-            #im[:, :, 2] = (mask > 0) * 255 + (mask == 0) * im[:, :, 2]
-            #cv2.polylines(im, [np.int0(location).reshape((-1, 1, 2))], True, (0, 255, 0), 3)
+            
             cv2.imshow(args.name, opn_image)
             cv2.imwrite(os.path.join(args.mask_path, '{:05d}.png'.format(f)), cv2.cvtColor(opn_image, cv2.COLOR_BGR2GRAY))
             key = cv2.waitKey(1)
@@ -110,106 +98,7 @@ if __name__ == '__main__':
         
         toc += cv2.getTickCount() - tic
     
-    #imageio.mimsave(os.path.join(args.mask_path, 'mask.gif'), masks)
     siammask.cpu()
     toc /= cv2.getTickFrequency()
     fps = f / toc
     print('SiamMask Time: {:02.1f}s Speed: {:3.1f}fps (with visulization!)'.format(toc, fps))
-
-    """
-    MEM_EVERY = 5
-    T = len(ims)
-    H, W = 240, 424
-    frames = np.empty((T, H, W, 3), dtype=np.float32)
-    holes = np.empty((T, H, W, 1), dtype=np.float32)
-    dists = np.empty((T, H, W, 1), dtype=np.float32)
-    
-    ims = [Image.open(imf).convert('RGB') for imf in img_files] 
-    
-    for i in range(T):
-        raw_frame = np.array(ims[i]) / 255
-        raw_frame = cv2.resize(raw_frame, dsize=(W, H), interpolation=cv2.INTER_NEAREST)
-        
-        raw_mask = np.array(Image.fromarray(masks[i], 'P'), dtype=np.uint8)
-        raw_mask = (raw_mask > 0.5).astype(np.uint8)
-        raw_mask = cv2.resize(raw_mask, dsize=(W, H), interpolation=cv2.INTER_NEAREST)
-        raw_mask = cv2.dilate(raw_mask, cv2.getStructuringElement(cv2.MORPH_CROSS,(3,3)))
-        
-        
-        frames[i] = raw_frame
-        holes[i, :, :, 0] = raw_mask.astype(np.float32)
-        dists[i, :, :, 0] = cv2.distanceTransform(raw_mask, cv2.DIST_L2, maskSize=5)
-        
-    cv2.destroyAllWindows()
-    frames = torch.from_numpy(np.transpose(frames, (3, 0, 1, 2)).copy()).float()
-    holes = torch.from_numpy(np.transpose(holes, (3, 0, 1, 2)).copy()).float()
-    dists = torch.from_numpy(np.transpose(dists, (3, 0, 1, 2)).copy()).float()
-    
-    # remove hole
-    frames = frames * (1-holes) + holes*torch.tensor([0.485, 0.456, 0.406]).view(3,1,1,1)
-    # valids area
-    valids = 1-holes
-    # unsqueeze to batch 1
-    frames = frames.unsqueeze(0)
-    holes = holes.unsqueeze(0)
-    dists = dists.unsqueeze(0)
-    valids = valids.unsqueeze(0)
-    
-    MEM_EVERY = 5
-    comps = torch.zeros_like(frames)
-    ppeds = torch.zeros_like(frames)
-    
-    midx = list(range(0, T, MEM_EVERY))
-    with torch.no_grad():
-        mkey, mval, mhol = opn(frames[:,:,midx], valids[:,:,midx], dists[:,:,midx])
-    
-    for f in range(T):
-        if f in midx:
-            ridx = [i for i in range(len(midx)) if i != int(f/MEM_EVERY)]
-        else:
-            ridx = list(range(len(midx)))
-        
-        fkey, fval, fhol = mkey[:, :, ridx], mval[:, :, ridx], mhol[:, :, ridx]
-        
-        for r in range(999):
-            if r == 0:
-                comp = frames[:, :, f]
-                dist = dists[:, :, f]
-            with torch.no_grad():
-                comp, dist = opn(fkey, fval, fhol, comp, valids[:, :, f], dist)
-            
-            comp, dist = comp.detach(), dist.detach()
-            if torch.sum(dist).item() == 0:
-                break
-        
-        comps[:, :, f] = comp
-    
-    ppeds[:, :, 0] = comps[:, :, 0]
-    hidden = None
-    for f in range(T):
-        with torch.no_grad():
-            pped, hidden =\
-                tcn(ppeds[:, :, f-1], holes[:, :, f-1], comps[:, :, f], holes[:, :, f], hidden)
-
-            ppeds[:, :, f] = pped
-    
-    # visualize
-    
-    for f in range(T):
-        est = (ppeds[0,:,f].permute(1,2,0).detach().cpu().numpy() * 255.).astype(np.uint8)
-        true = (frames[0,:,f].permute(1,2,0).detach().cpu().numpy() * 255.).astype(np.uint8) # h,w,3
-        mask = (dists[0,0,f].detach().cpu().numpy() > 0).astype(np.uint8) # h,w,1
-        
-        
-        canvas = np.concatenate([true, est], axis=0)
-        canvas = Image.fromarray(canvas)
-        canvas.save(os.path.join(args.save_path, '{:05d}.jpg'.format(f)))
-    """
-    
-    
-        
-    
-        
-
-    
-    
